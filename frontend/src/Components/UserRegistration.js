@@ -159,6 +159,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./styles/Register.css";
 
+import ReCAPTCHA from "react-google-recaptcha";
+
 const Registration = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -171,6 +173,8 @@ const Registration = () => {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
+  const [recaptchaValue, setRecaptchaValue] = useState("");
 
   // Function to get the user's location
   const getLocation = () => {
@@ -211,7 +215,7 @@ const Registration = () => {
 
   const sendOtp = async () => {
     try {
-      console.log(formData)
+      console.log(formData);
       await axios.post("http://localhost:3001/api/auth/send-otp", {
         phone: formData.phone,
       });
@@ -292,6 +296,10 @@ const Registration = () => {
         <option value="receiver">Receiver</option>
         <option value="volunteer">Volunteer</option>
       </select>
+      <ReCAPTCHA
+        sitekey="6LdZkJ8qAAAAAMbB4XChHpD8h7qxRkmCELvWlwe_"
+        onChange={(val) => setRecaptchaValue(val)}
+      />
 
       {isOtpSent ? (
         <>
@@ -307,7 +315,7 @@ const Registration = () => {
           </button>
         </>
       ) : (
-        <button onClick={sendOtp} className="submit-button">
+        <button onClick={sendOtp} disabled={!recaptchaValue} className="submit-button">
           Submit
         </button>
       )}

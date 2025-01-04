@@ -11,6 +11,7 @@ const {
     // getReceiverLog,
     // getVolunteerLog,
     // getProfile,
+    getvolunteers,
     SendOtp,
     verifyotp
 } = require("../controllers/user.controller");

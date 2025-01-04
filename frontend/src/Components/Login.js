@@ -1,4 +1,3 @@
-
 // import axios from "axios";
 // import React, { useState } from "react";
 // import { toast } from "react-toastify";
@@ -145,12 +144,13 @@
 
 // export default Login;
 
-
 // Login.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./styles/Login.css"; // Add this CSS file for styling
+
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Login = () => {
   const [phone, setPhone] = useState("");
@@ -159,9 +159,14 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
+  const [recaptchaValue, setRecaptchaValue] = useState("");
+
   const sendOtp = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/api/auth/login", { phone });
+      const response = await axios.post(
+        "http://localhost:3001/api/auth/login",
+        { phone }
+      );
       console.log(response);
       await axios.post("http://localhost:3001/api/auth/send-otp", { phone });
       setIsOtpSent(true);
@@ -176,7 +181,7 @@ const Login = () => {
   //     // Check if the user exists using the login endpoint
   //     const response = await axios.post("http://localhost:3001/api/auth/login", { phone });
   //     console.log(response);
-  
+
   //     // Check if the response status is 200
   //     if (response.status === 200) {
   //       // User exists, send OTP
@@ -193,12 +198,17 @@ const Login = () => {
   //     }
   //   }
   // };
-  
-  
+
   const verifyAndLogin = async () => {
     try {
-      await axios.post("http://localhost:3001/api/auth/verify-otp", { phone, otp });
-      const response = await axios.post("http://localhost:3001/api/auth/login", { phone });
+      await axios.post("http://localhost:3001/api/auth/verify-otp", {
+        phone,
+        otp,
+      });
+      const response = await axios.post(
+        "http://localhost:3001/api/auth/login",
+        { phone }
+      );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
       setErrorMessage("");
@@ -230,12 +240,20 @@ const Login = () => {
               onChange={(e) => setOtp(e.target.value)}
               className="input-field"
             />
+            <ReCAPTCHA
+              sitekey="6LdZkJ8qAAAAAMbB4XChHpD8h7qxRkmCELvWlwe_"
+              onChange={(val) => setRecaptchaValue(val)}
+            />
             <button onClick={verifyAndLogin} className="submit-button">
               Verify & Login
             </button>
           </>
         ) : (
-          <button onClick={sendOtp} className="submit-button">
+          <button
+            onClick={sendOtp}
+            disabled={!recaptchaValue}
+            className="submit-button"
+          >
             Send OTP
           </button>
         )}
