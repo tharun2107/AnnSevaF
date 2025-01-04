@@ -1,0 +1,32 @@
+.volunteer-table-container {
+    margin: 20px auto;
+    padding: 10px;
+    max-width: 80%;
+    text-align: center;
+  }
+  
+  .volunteer-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .volunteer-table th,
+  .volunteer-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .volunteer-table th {
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
+  }
+  
+  .volunteer-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .volunteer-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  

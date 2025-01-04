@@ -285,9 +285,22 @@ const getProfile = async (req, res) => {
   }
 };
 
+const getvolunteers = async (req, res) => {
+  console.log("in get volunteers");
+  console.log(req.user);
+  try {
+    const volunteers = await User.find({ role: "volunteer" });
+    res.status(200).json({ msg: "Retrieved volunteers successfully", volunteers });
+    console.log("volunteers fetched successfully");
+  } catch (error) {
+    res.status(500).json({ msg: "Failed to retrieve volunteers", error });
+  }
+};
+
 module.exports = {
   SendOtp,
   verifyotp,
   register,
   login,
+  getvolunteers,
 };
