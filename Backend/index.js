@@ -22,6 +22,7 @@ const userRoutes = require("./routes/user.route.js");
 const volunteerRoutes = require("./routes/volunteer.route.js");
 const historyRoutes = require("./routes/donationHistoryRoutes.js");
 const metrics = require("./routes/metrics.route.js");
+const imageHandler = require("./routes/imageHandler.js");
 
 app.use(cors());
 app.use(express.json());
@@ -53,6 +54,7 @@ app.use(
   validateToken(["donor", "receiver", "volunteer"]),
   historyRoutes
 );
+app.use("/api/pictures", imageHandler);
 
 // Admin Routes (apply adminAuth for restricted access)
 // app.use("/admin", validateToken, adminAuth, adminRoutes);
