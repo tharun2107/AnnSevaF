@@ -523,6 +523,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import "./styles/DonateForm.css";
 import api from "../api/axios";
+// import { set } from "mongoose";
 
 const DonateForm = ({
   receiverId,
@@ -589,7 +590,27 @@ const DonateForm = ({
       orgID,
     };
 
-    console.log(previewImage);
+    // console.log(previewImage);
+    const formdata = new FormData();
+    formdata.append("image", picture);
+    try {
+      const resp = await api.post('http://localhost:3001/api/pictures',
+        formdata,
+        {
+          headers : {
+            'Content-Type': "multipart/form-data",
+            Authorization : `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      )
+      setPreviewImage(resp.data.imageUrl);
+      toast.success("image Uploaded successfully to cloudinary");
+
+    } catch (err) {
+      console.log(err)
+      throw new Error("Failed to upload image.");
+    }
+    // donationData[donationPicture] = ...
 
     try {
       // console.log(donationData);

@@ -43,9 +43,7 @@ const postDonation = errorHandler(async (req, res) => {
       receiverObjectId = new mongoose.Types.ObjectId(receiverId);
     }
 
-    let pictureUrl = "";
-    // console.log(req.file)
-    if(req.file) pictureUrl = req.file.filename;
+    let pictureUrl = donationPicture;
 
     let volunteerId = null;
 
@@ -71,11 +69,13 @@ const postDonation = errorHandler(async (req, res) => {
       receiverId: isOrganisation ? organisazationId : receiverId,
       needVolunteer: false,
       volunteerId: volunteerId,
-      donationPicture: pictureUrl,
+      pictureUrl: pictureUrl,
+      isReceiverRequest: isOrganisation,
     });
 
     // console.log("reached here")
     // console.log("location", location)
+    // cc
 
     if (!isOrganisation) {
       let requestObjectId = null;
@@ -243,7 +243,7 @@ const donarAccept = async (req, res) => {
   try {
     // Query donations using donorId
     const donations = await Donation.find({ donorId: req.user.id });
-    console.log(donations); // Debugging the response
+    // console.log(donations); // Debugging the response
 
     if (donations.length === 0) {
       return res.status(200).json({ msg: "No donations currently", donations: [] });
@@ -310,7 +310,7 @@ const donarAccept = async (req, res) => {
         donations: matchedDonations,
       });
     }
-    console.log("matched donations",matchedDonations);
+    // console.log("matched donations",matchedDonations);
     // Return all matching donations with additional details
     return res.status(200).json({
       msg: "Fetched donations with required status",
@@ -389,7 +389,7 @@ const confirmPickup = async (req, res) => {
 
 const needVolunteer = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
+  // console.log(id);
   try {
     const donation = await Donation.findById(id);
     if (!donation) {
@@ -449,8 +449,8 @@ const getActiveRequests = async (req, res) => {
 
     const organizations = await User.find({ role: "receiver", isActive: true });
 
-    console.log("Requests:", requests);
-    console.log("Organizations:", organizations);
+    // console.log("Requests:", requests);
+    // console.log("Organizations:", organizations);
 
     res.status(200).json({
       msg: "Retrieved Active requests successfully",
